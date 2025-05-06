@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Astrogear</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="login-style.css">
+    <link rel="icon" type="image/x-icon" href="file.png">
+</head>
+
+<body>
+    <!-- Combined Login and Header Section -->
+    <header class="page-header header container-fluid">
+        <div class="overlay"></div>
+
+        <!-- Registration Section -->
+        <div class="register-container">
+            <div class="container" style="top: 550px; left: 1080px;">
+                <h1>Sign Up</h1>
+                <form id="registrationForm" method="POST" action="register.php">
+                    <!-- Ensure action points to register.php -->
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" name="firstName" id="firstName" class="form-control"
+                            placeholder="Enter first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" name="lastName" id="lastName" class="form-control"
+                            placeholder="Enter last name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Enter email"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="number">Phone Number</label>
+                        <input type="tel" name="number" id="number" class="form-control" placeholder="Enter number"
+                            required>
+                    </div>
+                    <div class="form-group position-relative">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" class="form-control"
+                            placeholder="Enter password" required>
+                        <span class="show-password position-absolute" style="top: 35px; right: 15px; cursor: pointer;"
+                            onclick="togglePasswordVisibility()">
+                            <i class="fa fa-eye"></i>
+                        </span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">REGISTER</button>
+                </form>
+                <div class="signup-link text-center mt-3">
+                    <span>Already have an account?</span>
+                    <a href="astrogear-login.html">Log In</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">
+            <img src="Astrogear black cropped.png" alt="Logo" class="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navigation"
+            aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="main-navigation">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Need help?</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!--This is the page footer-->
+    <footer class="page-footer">
+        <div class="footer-container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <h6 class="text-uppercase font-weight-bold">Additional Information</h6>
+                    <p>AstroGear is set to make a big impact in the e-commerce industry by offering computer hardware
+                        customers a focused, streamlined, and specialized online purchasing experience. AstroGear has
+                        the ability to revolutionize the way computer fans make online purchases because of its wide
+                        range of products and dedication to customer happiness.</p>
+                    <p>AstroGear specializes in computer components, offering products such as CPUs, GPUs, motherboards,
+                        memory, SSDs, power supplies, and software. In addition to hardware, the company provides
+                        consumer electronics like laptops, mobile phones, and accessories, along with desktop furniture.
+                        AstroGear also offers specialized services including custom computer building, cleaning for
+                        residential and commercial spaces, and repair services for various devices.</p>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <h6 class="text-uppercase font-weight-bold">Contact</h6>
+                    <p>1870 Antipolo, Maia Alta, Rizal<br /> astrogear@gmail.com
+                        <br /> +63 923 567 8841<br /> +63 992 567 8834
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright text-center">
+            © 2024 Copyright: astrogear.com
+        </div>
+    </footer>
+
+    <!-- jQuery and jQuery UI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+    <script src="registration-js.js"></script>
+</body>
+
+</html>

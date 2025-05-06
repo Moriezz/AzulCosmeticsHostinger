@@ -1,0 +1,606 @@
+<?php
+session_start();
+include("config.php");
+
+// Ensure user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo "<script>alert('Please log in to add items to the cart.'); window.location.href='astrogear-login.html';</script>";
+    exit();
+}
+
+$user_id = $_SESSION['user_id']; // Safe to use now
+
+// Check if the product ID is passed
+if (isset($_GET['product_id'])) {
+    $product_id = $_GET['product_id'];
+
+    // Query to get the product details
+    $product_query = "SELECT * FROM products WHERE ProductID = $product_id";
+    $product_result = mysqli_query($conn, $product_query);
+    $product = mysqli_fetch_assoc($product_result);
+
+    if ($product) {
+        $available_stock = $product['Quantity']; // Available stock
+        $productName = htmlspecialchars($product['ProductName']);
+        $productImage = htmlspecialchars($product['ProductImages']);
+        $productPrice = htmlspecialchars($product['Price']);
+        $category = htmlspecialchars($product['Category']);
+    } else {
+        echo "Product not found.";
+        exit();
+    }
+} else {
+    echo "Product ID is required.";
+    exit();
+}
+?>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="style-product.css" />
+        <link rel="stylesheet" href="product.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Sora:wght@100..800&display=swap"
+        />
+        <link rel="icon" type="image/x-icon" href="file.png" />
+        <title>Product Page</title>
+        <link rel="icon" type="image/x-icon" href="file.png">
+        <style>
+            /* Set a specific height for carousel images */
+            .carousel-item img {
+                width: 100%;
+                /* Make the carousel image responsive */
+                height: 500px;
+                /* Set a specific height */
+                object-fit: cover;
+                /* Ensure the image covers the area without distortion */
+            }
+
+            /* Optional: Adjust carousel size on smaller screens */
+            @media (max-width: 576px) {
+                .carousel-item img {
+                    height: 300px;
+                    /* Smaller height on mobile devices */
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-md">
+            <a class="navbar-brand" href="index.php"
+                ><img src="Astrogear black cropped.png" alt="Logo" class="logo"
+            /></a>
+            <button
+                class="navbar-toggler navbar-dark"
+                type="button"
+                data-toggle="collapse"
+                data-target="#main-navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="main-navigation">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.php"
+                            ><i class="fa-solid fa-cart-shopping fa-2xl"></i
+                        ></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="wishlist.php"
+                            ><i class="fa-solid fa-heart fa-2xl"></i
+                        ></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <section class="product-page py-5">
+            <div class="container">
+                <div class="row">
+                    <!-- Product Image Carousel Section -->
+                    <div class="col-md-6">
+                        <div
+                            id="productCarousel"
+                            class="carousel slide"
+                            data-ride="carousel"
+                        >
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                <img 
+                                    src="productImages/<?php echo $productImage; ?>" 
+                                    alt="<?php echo $productName; ?>" 
+                                    class="d-block"
+                                />
+                                </div>
+                                <div class="carousel-item">
+                                    <img
+                                        src="image-removebg-preview (1).png"
+                                        alt="Product Image 2"
+                                        class="d-block"
+                                    />
+                                </div>
+                            </div>
+                            <a
+                                class="carousel-control-prev"
+                                href="#productCarousel"
+                                role="button"
+                                data-slide="prev"
+                            >
+                                <span
+                                    class="carousel-control-prev-icon"
+                                    aria-hidden="true"
+                                ></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a
+                                class="carousel-control-next"
+                                href="#productCarousel"
+                                role="button"
+                                data-slide="next"
+                            >
+                                <span
+                                    class="carousel-control-next-icon"
+                                    aria-hidden="true"
+                                ></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+ 
+
+
+                    <!-- Form to add a product to the cart -->
+
+                    <!-- Product Details Section -->
+                    <div class="col-md-6">
+                    <h2 style="font-weight: bold" id="product_name">
+                        <?= $product['ProductName']; ?>
+                    </h2>
+                    <h2 id="category"><?= $product['Category']; ?></h2>
+                    <h2 id="status"></h2>
+                    <hr />
+                    <h4 id="price">₱<?= number_format($product['Price'], 2); ?></h4>
+                
+                    <p class="product-description">
+                        The
+                        <span id="productHighlight"><?= $product['ProductName']; ?></span>
+                        is a high-performance desktop processor from AMD's
+                        Ryzen 7000 series, based on the Zen 4 architecture.
+                    </p>
+                    <hr />
+                    <p id="priceHighlight"><?= $product['Quantity'] > 0 ? 'In stock' : 'Out of stock'; ?></p>
+                    
+                    <!-- Form to Add to Cart -->
+                    <form method="POST" action="add_to_cart.php">
+                        <div class="quantity mb-3">
+                            <label for="quantity" class="font-weight-bold">Quantity:</label>
+                            <input
+                                type="number"
+                                id="quantity"
+                                name="quantity"
+                                min="1"
+                                max="<?= $available_stock; ?>"
+                                value="1"
+                                class="form-control w-25"
+                            />
+                        </div>
+                        <!-- Hidden input for the product ID -->
+                        <form class="product-form" action="" method="POST" id="product-form-<?php echo $product['ProductID']; ?>">
+                    <!-- Hidden input to store product_id -->
+                    <input type="hidden" name="product_id" value="<?php echo $product['ProductID']; ?>">
+
+                    <!-- Display product details -->
+                    <div class="container">
+            <button type="submit" class="btn btn-lg btn-block mb-3 CART-button2">
+                <span>Add to Cart</span>
+            </button>
+        </div>
+                </form>
+
+                <!-- AJAX Script to Handle Form Submission Without Page Reload -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Intercept form submission to use AJAX
+                        $('.product-form').submit(function(e) {
+                            e.preventDefault(); // Prevent normal form submission
+
+                            var form = $(this);
+                            var productId = form.find('input[name="product_id"]').val();
+
+                            $.ajax({
+                                url: '', // This is the same page, so leave it empty
+                                type: 'POST',
+                                data: form.serialize(), // Serialize form data for sending
+                                success: function(response) {
+                                    alert('Product added to cart!');
+                                    form.find('.add-to-cart-btn').text('Added').prop('disabled', true); // Disable button after adding
+                                },
+                                error: function(xhr, status, error) {
+                                    alert('An error occurred: ' + error); // Show error message
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+                <?php
+                // Handle Add to Cart Logic (Same page PHP)
+                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id'])) {
+                    $product_id = $_POST['product_id'];
+
+                    // Query to get the product details for adding to cart
+                    $product_query = "SELECT * FROM products WHERE ProductID = $product_id";
+                    $product_result = mysqli_query($conn, $product_query);
+
+                    if ($product = mysqli_fetch_assoc($product_result)) {
+                        // Add the product to the cart (using session to store cart)
+                        $_SESSION['cart'][] = $product; // Add the product to the session cart
+                        echo "Product added to cart!"; // Response message to be handled by AJAX
+                    } else {
+                        echo "Product not found!";
+                    }
+                }
+                ?>
+                        <div class="container">
+                            <form method="POST" action="add_to_wishlist.php" class="wishlist-form">
+                                <input type="hidden" name="product_id" value="<?= $product['ProductID']; ?>">
+                                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block CART-button" style="background-color: #ff851b">
+                                    <span>Add to Wishlist</span>
+                                </button>
+                            </form>
+
+                            <script>
+                            $(document).ready(function() {
+                                // Intercept wishlist form submission to use AJAX
+                                $('.product-form').submit(function(e) {
+                                    e.preventDefault(); // Prevent normal form submission
+                                    var form = $(this);
+                                    
+                                    $.ajax({
+                                        url: 'add_to_wishlist.php', // URL for adding to wishlist
+                                        type: 'POST',
+                                        data: form.serialize(), // Serialize form data for sending
+                                        dataType: 'json', // Expect JSON response
+                                        success: function(response) {
+                                            if (response.status === 'success') {
+                                                alert(response.message); // Show success message
+                                                window.location.href = 'wishlist.php'; // Redirect to wishlist page
+                                            } else {
+                                                alert(response.message); // Show error message
+                                            }
+                                        },
+                                        error: function(xhr, status, error) {
+                                            alert('An error occurred: ' + error); // Show error message
+                                        }
+                                    });
+                                });
+                            });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+
+                        
+
+                <!-- Payment Options Section -->
+                <div class="row mt-5">
+                    <div class="col-md-12 text-center">
+                        <h5
+                            style="text-decoration: underline"
+                            class="product-description"
+                        >
+                            Payment Options
+                        </h5>
+                        <div
+                            class="paymentOptions d-flex justify-content-around"
+                        >
+                            <img
+                                style="width: 900px; height: auto"
+                                src="payment_options.png"
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="additional-info py-5 bg-light">
+            <div class="container">
+                <h3 class="mb-4">Product Details</h3>
+                <div class="specs">
+                    <ul>
+                        <li><strong>Base Clock Speed:</strong> 4.7 GHz</li>
+                        <li>
+                            <strong>Boost Clock Speed:</strong> Up to 5.3 GHz
+                        </li>
+                        <li><strong>Cache:</strong> 32 MB L3 cache</li>
+                        <li>
+                            <strong>TDP (Thermal Design Power):</strong> 105
+                            watts
+                        </li>
+                        <li><strong>Socket Type:</strong> AM5</li>
+                        <li>
+                            <strong>Integrated Graphics:</strong> AMD Radeon
+                            Graphics
+                        </li>
+                    </ul>
+                </div>
+
+                <p>
+                    The Ryzen 5 7600X offers excellent single-core and
+                    multi-core performance, making it ideal for gaming, content
+                    creation, and multitasking. With support for DDR5 memory and
+                    PCIe 5.0, it provides a future-proof platform for high-speed
+                    memory and storage solutions. The processor's competitive
+                    pricing and performance make it a popular choice among
+                    gamers and enthusiasts looking for a balance of power and
+                    efficiency.
+                </p>
+            </div>
+        </section>
+
+        <div class="product-grid">
+            <div class="product-container swiper">
+                <div class="product-wrapper">
+                    <ul class="product-list swiper-wrapper">
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/processors/ryzen77800x.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Processors</p>
+                                <h2 class="product-title">PROCESSORS</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/motherboards/gigabyteBB550m.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Motherboards</p>
+                                <h2 class="product-title">MOTHERBOARDS</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/gpu/rx7700.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Graphics Cards</p>
+                                <h2 class="product-title">GRAPHICS CARDS</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/memory/gskillRam1.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Memory</p>
+                                <h2 class="product-title">MEMORY</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/solidStateDrive/samsung990evo.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Solid State Drives</p>
+                                <h2 class="product-title">SSD</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/powerSupply/seasonicPsu.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Power Supply</p>
+                                <h2 class="product-title">POWER SUPPLY</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/case/lianliCase.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Pc Case</p>
+                                <h2 class="product-title">PC CASE</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/laptop/rogZyphyrusG14Square.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Laptops</p>
+                                <h2 class="product-title">LAPTOPS</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/monitor/msiMonitor.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Monitors</p>
+                                <h2 class="product-title">Monitors</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/keyboard/wooting60he.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Keyboards</p>
+                                <h2 class="product-title">KEYBOARDS</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/mouse/lamzuAtlantis.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Mouse</p>
+                                <h2 class="product-title">MOUSE</h2>
+                            </a>
+                        </li>
+
+                        <li class="product-card swiper-slide">
+                            <a href="#" class="product-link">
+                                <img
+                                    src="productImages/headset/logitechGproX.png"
+                                    alt="Ryzen 7"
+                                    class="product-image"
+                                />
+                                <p class="badge">Headphones</p>
+                                <h2 class="product-title">HEADPHONES</h2>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--This is the page footer-->
+        <footer class="page-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-12">
+                        <h6 class="text-uppercase font-weight-bold">
+                            Additional Information
+                        </h6>
+                        <p>
+                            AstroGear is set to make a big impact in the
+                            e-commerce industry by offering computer hardware
+                            customers a focused, streamlined, and specialized
+                            online purchasing experience. AstroGear has the
+                            ability to revolutionize the way computer fans make
+                            online purchases because of its wide range of
+                            products and dedication to customer happiness.
+                        </p>
+                        <p>
+                            AstroGear specializes in computer components,
+                            offering products such as CPUs, GPUs, motherboards,
+                            memory, SSDs, power supplies, and software. In
+                            addition to hardware, the company provides consumer
+                            electronics like laptops, mobile phones, and
+                            accessories, along with desktop furniture. AstroGear
+                            also offers specialized services including custom
+                            computer building, cleaning for residential and
+                            commercial spaces, and repair services for various
+                            devices.
+                        </p>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <h6 class="text-uppercase font-weight-bold">Contact</h6>
+                        <p>
+                            1870 Antipolo, Maia Alta, Rizal<br />
+                            astrogear@gmail.com <br />
+                            +63 923 567 8841<br />
+                            +63 992 567 8834
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright text-center">
+                © 2024 Copyright: astrogear.com
+            </div>
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>
